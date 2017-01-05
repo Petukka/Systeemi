@@ -42,8 +42,6 @@ int main(void)
 	signal(SIGINT, sighandler);
 	
 	while (1) {
-		in = 0;
-		out = 0;
 		background = 0;
 
 		getcwd(dir, sizeof(dir));
