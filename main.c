@@ -5,6 +5,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #define LOGOUT 30
 #define MAXNUM 40
@@ -39,6 +42,8 @@ int main(void)
 	signal(SIGINT, sighandler);
 	
 	while (1) {
+		in = 0;
+		out = 0;
 		background = 0;
 
 		getcwd(dir, sizeof(dir));
