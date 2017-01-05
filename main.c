@@ -33,6 +33,8 @@ int main(void)
 	int background, i, j, fd;
 	int pid;
 	char dir[1024];
+	char input[64];
+	char output[64];
 	
 	
 	signal(SIGALRM, sighandler);
@@ -91,8 +93,12 @@ int main(void)
 		for (j = 0; j < i; j++) {
 			if (strcmp(args[j], ">") == 0) {
 				printf("> catched\n");
+				args[j] = NULL;
+				strcpy(output, args[j+1]);
 			} else if (strcmp(args[j], "<") == 0) {
 				printf("< catched\n");
+				args[j] = NULL;
+				strcpy(input, args[j-1]);
 			} else if (strcmp(args[j], "|") == 0) {
 				printf("| catched\n");
 			}
@@ -108,7 +114,7 @@ int main(void)
 				/* child process */
 
 				/* write output to file lul */
-				fd = open("lul", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+				fd = open(output, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 				dup2(fd, 1);   // make stdout go to file
 				close(fd);     // fd no longer needed - the dup'ed handles are sufficient
 
