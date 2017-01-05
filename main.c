@@ -120,11 +120,10 @@ int main(void)
 				/* child process */
 
 				if (out == 1) {
-
+					FILE* file = fopen(output, "w");
 					/* write output to file lul */
-					fd = open(output, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-					dup2(fd, 1);   // make stdout go to file
-					close(fd);     // fd no longer needed - the dup'ed handles are sufficient
+					dup2(fileno(file), 1);   // make stdout go to file
+					fclose(file);     // fd no longer needed - the dup'ed handles are sufficient
 				}
 
 				execvp(args[0], args);
