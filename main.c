@@ -26,15 +26,18 @@ int main(void)
 	char * cmd, line[MAXLEN], * args[MAXNUM];
 	int background, i;
 	int pid;
+	char dir[1024];
 	
 	signal(SIGALRM, sighandler);
 	signal(SIGINT, sighandler);
 	
 	while (1) {
 		background = 0;
+
+		getcwd(dir, sizeof(dir));
 		
 		/* print the prompt */
-		printf("> ");
+		printf("%s> ", dir);
 		/* set the timeout for alarm signal (autologout) */
 		alarm(LOGOUT);
 		
