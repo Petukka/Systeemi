@@ -15,6 +15,9 @@ void sighandler(int sig)
 		case SIGALRM:
 			printf("\nautologout\n");
 			exit(0);
+		case SIGINT:
+			printf("\nuser interrupt\n");
+			exit(0);
 		default:
 			break;
 	}
