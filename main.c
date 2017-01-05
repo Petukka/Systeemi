@@ -72,6 +72,11 @@ int main(void)
 		if (strcmp(args[0],"exit")==0) {
 			exit(0);
 		}
+
+		if (strcmp(args[0],"cd")==0) {
+			chdir(args[1]);
+			continue;
+		}
 		
 		/* fork to run the command */
 		switch (pid = fork()) {
