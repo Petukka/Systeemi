@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define LOGOUT 15
+#define LOGOUT 30
 #define MAXNUM 40
 #define MAXLEN 160
 
@@ -23,6 +23,8 @@ void sighandler(int sig)
 	}
 	return;
 }
+
+
 
 int main(void)
 {
@@ -68,6 +70,8 @@ int main(void)
 			i++;
 			cmd = NULL;
 		}
+
+
 		
 		if (strcmp(args[0],"exit")==0) {
 			exit(0);
