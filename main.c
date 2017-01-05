@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <sys/wait.h>
 
@@ -29,9 +30,10 @@ void sighandler(int sig)
 int main(void)
 {
 	char * cmd, line[MAXLEN], * args[MAXNUM];
-	int background, i, j;
+	int background, i, j, fd;
 	int pid;
 	char dir[1024];
+	
 	
 	signal(SIGALRM, sighandler);
 	signal(SIGINT, sighandler);
@@ -104,6 +106,12 @@ int main(void)
 				continue;
 			case 0:
 				/* child process */
+
+				/* write output to file lul */
+				fd = open("lul", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+				dup2(fd, 1);   // make stdout go to file
+				close(fd);     // fd no longer needed - the dup'ed handles are sufficient
+
 				execvp(args[0], args);
 				perror("execvp");
 				exit(1);
