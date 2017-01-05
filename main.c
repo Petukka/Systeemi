@@ -5,9 +5,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
 #define LOGOUT 30
 #define MAXNUM 40
