@@ -103,7 +103,7 @@ int main(void)
 			} else if (strcmp(args[j], "<") == 0) {
 				printf("< catched\n");
 				args[j] = NULL;
-				strcpy(input, args[j-1]);
+				strcpy(input, args[j+1]);
 				in = 1;
 			} else if (strcmp(args[j], "|") == 0) {
 				printf("| catched\n");
@@ -124,6 +124,10 @@ int main(void)
 					/* write output to file lul */
 					dup2(fileno(file), 1);   // make stdout go to file
 					fclose(file);     // fd no longer needed - the dup'ed handles are sufficient
+				} else if (in == 1) {
+					FILE* file = fopen(input, "r");
+					dup2(fileno(file), 0);
+					fclose(file);
 				}
 
 				execvp(args[0], args);
