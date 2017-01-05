@@ -40,7 +40,7 @@ int main(void)
 		getcwd(dir, sizeof(dir));
 		
 		/* print the prompt */
-		printf("%s> ", dir);
+		printf("$ %s > ", dir);
 		/* set the timeout for alarm signal (autologout) */
 		alarm(LOGOUT);
 		
