@@ -29,7 +29,7 @@ void sighandler(int sig)
 int main(void)
 {
 	char * cmd, line[MAXLEN], * args[MAXNUM];
-	int background, i;
+	int background, i, j;
 	int pid;
 	char dir[1024];
 	
@@ -84,6 +84,16 @@ int main(void)
 				chdir(args[1]);
 			}
 			continue;
+		}
+
+		for (j = 0; j < i; j++) {
+			if (strcmp(args[j], ">") == 0) {
+				printf("> catched\n");
+			} else if (strcmp(args[j], "<") == 0) {
+				printf("< catched\n");
+			} else if (strcmp(args[j], "|") == 0) {
+				printf("| catched\n");
+			}
 		}
 		
 		/* fork to run the command */
