@@ -44,7 +44,7 @@ int main(void)
 		/* print the prompt */
 		printf("$ %s > ", dir);
 		/* set the timeout for alarm signal (autologout) */
-		alarm(LOGOUT);
+		/*alarm(LOGOUT);*/
 		
 		/* read the users command */
 		if (fgets(line,MAXLEN,stdin) == NULL) {
