@@ -35,12 +35,16 @@ int main(void)
 	char dir[1024];
 	char input[64];
 	char output[64];
+	int in;
+	int out;
 	
 	
 	signal(SIGALRM, sighandler);
 	signal(SIGINT, sighandler);
 	
 	while (1) {
+		out = 0;
+		in = 0;
 		background = 0;
 
 		getcwd(dir, sizeof(dir));
@@ -95,10 +99,12 @@ int main(void)
 				printf("> catched\n");
 				args[j] = NULL;
 				strcpy(output, args[j+1]);
+				out = 1;
 			} else if (strcmp(args[j], "<") == 0) {
 				printf("< catched\n");
 				args[j] = NULL;
 				strcpy(input, args[j-1]);
+				in = 1;
 			} else if (strcmp(args[j], "|") == 0) {
 				printf("| catched\n");
 			}
@@ -113,10 +119,13 @@ int main(void)
 			case 0:
 				/* child process */
 
-				/* write output to file lul */
-				fd = open(output, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-				dup2(fd, 1);   // make stdout go to file
-				close(fd);     // fd no longer needed - the dup'ed handles are sufficient
+				if (out == 1) {
+
+					/* write output to file lul */
+					fd = open(output, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+					dup2(fd, 1);   // make stdout go to file
+					close(fd);     // fd no longer needed - the dup'ed handles are sufficient
+				}
 
 				execvp(args[0], args);
 				perror("execvp");
