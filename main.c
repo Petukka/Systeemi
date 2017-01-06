@@ -40,6 +40,7 @@ int main(void)
 	int out;
 	int inout;
 	int pip;
+
 	
 	
 	signal(SIGALRM, sighandler);
