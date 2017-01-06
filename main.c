@@ -35,9 +35,11 @@ int main(void)
 	char dir[1024];
 	char input[64];
 	char output[64];
+	char pipput[64];
 	int in;
 	int out;
 	int inout;
+	int pip;
 	
 	
 	signal(SIGALRM, sighandler);
@@ -47,6 +49,7 @@ int main(void)
 		out = 0;
 		in = 0;
 		inout = 0;
+		pip = 0;
 		background = 0;
 
 		getcwd(dir, sizeof(dir));
@@ -110,6 +113,9 @@ int main(void)
 				in = 1;
 			} else if (strcmp(args[j], "|") == 0) {
 				printf("| catched\n");
+				args[j] = NULL;
+				strcpy(pipput, args[j+1]);
+				pip = 1;
 			}
 		}
 
@@ -127,6 +133,12 @@ int main(void)
 				continue;
 			case 0:
 				/* child process */
+
+				if (pip == 1) {
+
+
+				}
+				
 				if (inout == 1) {
 					FILE* file = fopen(input, "r");
 					dup2(fileno(file), 0);
