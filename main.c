@@ -128,15 +128,14 @@ int main(void)
 			case 0:
 				/* child process */
 				if (inout == 1) {
-					File* file = fopen(input, "r");
+					FILE* file = fopen(input, "r");
 					dup2(fileno(file), 0);
 					fclose(file);
-					execvp(args[0], args [1]);
-					perror("execvp");
-					
+					file = fopen(output, "w");
+					dup2(fileno(file), 1);
+					fclose(file);		
 
 				}
-
 				else if (out == 1) {
 					FILE* file = fopen(output, "w");
 					/* write output to file lul */
