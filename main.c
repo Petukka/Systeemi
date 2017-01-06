@@ -25,20 +25,39 @@ void sighandler(int sig)
 	return;
 }
 
+void pipeHandler(char **args, char **pipeArgs) {
+	/* fork to run the command */
+	int pid, fd[2];
 
+	pipe(fd);	
+	switch (pid = fork()) {
+		case -1:
+			/* error */
+			perror("fork");
+			exit(1);
+		case 0:
+			/* child process */
+			close(0);
+			dup2(fd[0], 0);
+			close(fd[1]);
+			execvp(pipeArgs[0], pipeArgs);
+			perror("execvp");
+		default:
+			/* parent */
+			close(1);
+			dup2(fd[1], 1);
+			close(fd[0]);
+			execvp(args[0], args);
+			perror("execvp");
+	}
+}
 
 int main(void)
 {
-	char * cmd, line[MAXLEN], * args[MAXNUM];
-	int background, i, j, fd;
+	char * cmd, line[MAXLEN], * args[MAXNUM], **pipeArgs;
+	int background, i, j, in, out, inout, p;
 	int pid;
-	char dir[1024];
-	char input[64];
-	char output[64];
-	int in;
-	int out;
-	int inout;
-	
+	char dir[1024], input[64], output[64];	
 	
 	signal(SIGALRM, sighandler);
 	signal(SIGINT, sighandler);
@@ -110,6 +129,9 @@ int main(void)
 				in = 1;
 			} else if (strcmp(args[j], "|") == 0) {
 				printf("| catched\n");
+				p = 1;
+				args[j] = NULL;
+				pipeArgs = args + j + 1;
 			}
 		}
 
@@ -128,25 +150,41 @@ int main(void)
 			case 0:
 				/* child process */
 				if (inout == 1) {
+					printf("kaksisuuntainen redirection\n");
 					FILE* file = fopen(input, "r");
 					dup2(fileno(file), 0);
 					fclose(file);
 					file = fopen(output, "w");
 					dup2(fileno(file), 1);
-					fclose(file);		
-
+					fclose(file);
 				}
 				else if (out == 1) {
+					printf("output redirection\n");
 					FILE* file = fopen(output, "w");
-					/* write output to file lul */
-					dup2(fileno(file), 1);   // make stdout go to file
-					fclose(file);     // fd no longer needed - the dup'ed handles are sufficient
+					dup2(fileno(file), 1);
+					fclose(file);
 				} else if (in == 1) {
+					printf("input redirection\n");
 					FILE* file = fopen(input, "r");
 					dup2(fileno(file), 0);
 					fclose(file);
+				} else if (p == 1) {
+					printf("pipe redirection\n");
+					i = 0;
+					while (args[i] != NULL) {
+						printf("arg %d: %s\n", i, args[i]);
+						i++;
+					}
+					i = 0;
+					while (pipeArgs[i] != NULL) {
+						printf("arg %d: %s\n", i, pipeArgs[i]);
+						i++;
+					}
+					pipeHandler(args, pipeArgs);
+					exit(1);
 				}
 
+				printf("suoritus mainissa\n");
 				execvp(args[0], args);
 				perror("execvp");
 				exit(1);
