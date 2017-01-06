@@ -128,7 +128,12 @@ int main(void)
 			case 0:
 				/* child process */
 				if (inout == 1) {
-
+					File* file = fopen(input, "r");
+					dup2(fileno(file), 0);
+					fclose(file);
+					execvp(args[0], args [1]);
+					perror("execvp");
+					
 
 				}
 
