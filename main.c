@@ -85,6 +85,7 @@ int main(void)
 			exit(0);
 		}
 
+
 		if (strcmp(args[0],"cd")==0) {
 			if (args[1] == NULL) {
 				chdir(getenv("HOME"));				
