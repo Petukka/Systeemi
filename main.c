@@ -136,7 +136,6 @@ int main(void)
 
 				if (pip == 1) {
 
-
 				}
 				
 				if (inout == 1) {
@@ -159,6 +158,7 @@ int main(void)
 					fclose(file);
 				}
 
+
 				execvp(args[0], args);
 				perror("execvp");
 				exit(1);
@@ -170,6 +170,7 @@ int main(void)
 					while (wait(NULL)!=pid)
 						printf("some other child process exited\n");
 				}
+
 				break;
 		}
 	}
