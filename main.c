@@ -66,6 +66,7 @@ int main(void)
 		out = 0;
 		in = 0;
 		inout = 0;
+		p = 0;
 		background = 0;
 
 		getcwd(dir, sizeof(dir));
