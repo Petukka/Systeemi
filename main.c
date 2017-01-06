@@ -57,7 +57,7 @@ int main(void)
 	char * cmd, line[MAXLEN], * args[MAXNUM], **pipeArgs;
 	int background, i, j, in, out, inout, p;
 	int pid;
-	char dir[1024], input[64], output[64];	
+	char dir[1024], input[64], output[64];
 	
 	signal(SIGALRM, sighandler);
 	signal(SIGINT, sighandler);
@@ -66,6 +66,7 @@ int main(void)
 		out = 0;
 		in = 0;
 		inout = 0;
+		pip = 0;
 		background = 0;
 
 		getcwd(dir, sizeof(dir));
@@ -149,6 +150,11 @@ int main(void)
 				continue;
 			case 0:
 				/* child process */
+
+				if (pip == 1) {
+
+				}
+				
 				if (inout == 1) {
 					printf("kaksisuuntainen redirection\n");
 					FILE* file = fopen(input, "r");
@@ -184,7 +190,6 @@ int main(void)
 					exit(1);
 				}
 
-				printf("suoritus mainissa\n");
 				execvp(args[0], args);
 				perror("execvp");
 				exit(1);
@@ -196,6 +201,7 @@ int main(void)
 					while (wait(NULL)!=pid)
 						printf("some other child process exited\n");
 				}
+
 				break;
 		}
 	}
