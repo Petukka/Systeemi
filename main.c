@@ -27,6 +27,7 @@ void sighandler(int sig)
 
 void pipeHandler(char **args, char **pipeArgs) {
 	/* fork to run the command */
+<<<<<<< HEAD
 	int fd[2];
 	pid_t pid1;
 	pid_t pid2;
@@ -58,8 +59,43 @@ void pipeHandler(char **args, char **pipeArgs) {
 			}
 		default:
 			waitpid(-1, NULL, 0);
+=======
+	pid_t pid;
+	pid_t pid2;
+	int fd[2];
+
+	pid = fork();
+	if (pid < 0) {
+		perror("fork");
+		return;
+	}
+	else if (pid == 0) {
+		pipe(fd);
+		pid2 = fork();
+
+		if(pid2 < 0) {
+			perror("fork");
+			return;
+		}
+		
+		else if (pid2 == 0) {
+			dup2(fd[1], 1);
+			close(fd[0]);
+			execvp(args[0], args);
+		}
+		else {
+			waitpid(-1, NULL, 0);
+			dup2(fd[0], 0);
+			close(fd[1]);
+			execvp(pipeArgs[0], pipeArgs);
+		}		
+	}
+	else {
+		waitpid(-1, NULL, 0);
+>>>>>>> 219c16a77dff0c8ccb89696b1e61b81482ed6f65
 	}
 }
+
 
 int main(void)
 {
