@@ -27,28 +27,37 @@ void sighandler(int sig)
 
 void pipeHandler(char **args, char **pipeArgs) {
 	/* fork to run the command */
-	int pid, fd[2];
-
-	pipe(fd);	
-	switch (pid = fork()) {
+	int fd[2];
+	pid_t pid1;
+	pid_t pid2;
+		
+	switch (pid1 = fork()) {
 		case -1:
 			/* error */
 			perror("fork");
-			exit(1);
+			return;
 		case 0:
 			/* child process */
-			close(0);
-			dup2(fd[0], 0);
-			close(fd[1]);
-			execvp(pipeArgs[0], pipeArgs);
-			perror("execvp");
+			pipe(fd);
+			switch(pid2 = fork()) {
+				case -1:
+					perror("fork");
+					return;
+				case 0:
+					dup2(fd[1], 1);
+					close(fd[0]);
+					execvp(args[0], args);
+					perror("execvp");
+					break;
+				default:
+					waitpid(-1, NULL, 0);
+					dup2(fd[0], 0);
+					close(fd[1]);
+					execvp(pipeArgs[0], pipeArgs);			
+					perror("execvp");
+			}
 		default:
-			/* parent */
-			close(1);
-			dup2(fd[1], 1);
-			close(fd[0]);
-			execvp(args[0], args);
-			perror("execvp");
+			waitpid(-1, NULL, 0);
 	}
 }
 
