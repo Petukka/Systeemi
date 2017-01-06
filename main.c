@@ -149,11 +149,6 @@ int main(void)
 				continue;
 			case 0:
 				/* child process */
-
-				if (pip == 1) {
-
-				}
-				
 				if (inout == 1) {
 					printf("kaksisuuntainen redirection\n");
 					FILE* file = fopen(input, "r");
