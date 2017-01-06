@@ -37,6 +37,7 @@ int main(void)
 	char output[64];
 	int in;
 	int out;
+	int inout;
 	
 	
 	signal(SIGALRM, sighandler);
@@ -45,6 +46,7 @@ int main(void)
 	while (1) {
 		out = 0;
 		in = 0;
+		inout = 0;
 		background = 0;
 
 		getcwd(dir, sizeof(dir));
@@ -110,6 +112,12 @@ int main(void)
 				printf("| catched\n");
 			}
 		}
+
+		if ((out == 1) && (in == 1)) {
+			in = 0;
+			out = 0;
+			inout = 1;
+		}
 		
 		/* fork to run the command */
 		switch (pid = fork()) {
@@ -119,8 +127,12 @@ int main(void)
 				continue;
 			case 0:
 				/* child process */
+				if (inout == 1) {
 
-				if (out == 1) {
+
+				}
+
+				else if (out == 1) {
 					FILE* file = fopen(output, "w");
 					/* write output to file lul */
 					dup2(fileno(file), 1);   // make stdout go to file
