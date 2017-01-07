@@ -18,7 +18,6 @@ void sighandler(int sig)
 			exit(0);
 		case SIGINT:
 			printf("\nuser interrupt\n");
-			exit(0);
 		default:
 			break;
 	}
