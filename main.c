@@ -10,18 +10,24 @@
 #define MAXNUM 40
 #define MAXLEN 160
 
-void sighandler(int sig)
-{
+void sighandler(int sig) {
+	char dir[1024];
 	switch (sig) {
 		case SIGALRM:
 			printf("\nautologout\n");
 			exit(0);
 		case SIGINT:
-			printf("\nuser interrupt\n");
-			exit(0);
+			printf("\nuser interrupt\n");			
+			break;
 		default:
 			break;
 	}
+
+	getcwd(dir, sizeof(dir));
+			
+	/* print the prompt */
+	printf("$ %s > ", dir);
+	fflush(stdout);
 	return;
 }
 
@@ -79,12 +85,12 @@ int main(void)
 		p = 0;
 		background = 0;
 
-		getcwd(dir, sizeof(dir));
-		
-		/* print the prompt */
-		printf("$ %s > ", dir);
 		/* set the timeout for alarm signal (autologout) */
 		/*alarm(LOGOUT);*/
+
+		getcwd(dir, sizeof(dir));			
+		/* print the prompt */
+		printf("$ %s > ", dir);
 		
 		/* read the users command */
 		if (fgets(line,MAXLEN,stdin) == NULL) {
