@@ -16,3 +16,4 @@ rm checksum.txt
 ps
 gedit
 gedit &
+exit
