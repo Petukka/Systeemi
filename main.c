@@ -76,7 +76,7 @@ int main(void)
 	char dir[1024], input[64], output[64];
 	
 	signal(SIGALRM, sighandler);
-	signal(SIGINT, sighandler);
+	signal(SIGINT, sighandler);	
 	
 	while (1) {
 		out = 0;
@@ -87,10 +87,10 @@ int main(void)
 
 		/* set the timeout for alarm signal (autologout) */
 		/*alarm(LOGOUT);*/
-
 		getcwd(dir, sizeof(dir));			
 		/* print the prompt */
 		printf("$ %s > ", dir);
+		
 		
 		/* read the users command */
 		if (fgets(line,MAXLEN,stdin) == NULL) {
