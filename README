@@ -1,5 +1,18 @@
-This is github repo :D
-lul
-lelelele
-no lol
-hahaha
+Commands that we tested in our shell:
+cd some_directory
+cd ..
+cd
+ls -l -A
+ls -l -a -S > output.txt
+cat output.txt
+less output.txt (you can get out of this by pressing q button)
+uname -a
+wc
+md5sum < output.txt
+md5sum < output.txt > checksum.txt
+cat -b output.txt | wc -l
+ls -al | tr a-z A-Z
+rm checksum.txt
+ps
+gedit
+gedit &
