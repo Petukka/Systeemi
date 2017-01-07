@@ -16,4 +16,5 @@ rm checksum.txt
 ps
 gedit
 gedit &
+sleep 10
 exit
